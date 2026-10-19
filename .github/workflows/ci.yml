@@ -1,0 +1,32 @@
+name: ci
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Tests (standard library only, a local server, no network)
+        run: python -m unittest discover -s tests -t . -v
+      - name: Demo
+        run: python examples/demo.py
+      - name: Every commit is mine, with no trailers
+        run: |
+          me='Shinabaze Ajiya <198176976+shinabaze@users.noreply.github.com>'
+          if git log --format='%an <%ae>' | sort -u | grep -vxF "$me"; then
+            echo "a commit has another author"; exit 1
+          fi
+          if git log --format='%cn <%ce>' | sort -u | grep -vxF -e "$me" -e 'GitHub <noreply@github.com>'; then
+            echo "a commit has another committer"; exit 1
+          fi
+          if git log --format='%(trailers:only,unfold)' | grep -q .; then
+            echo "a commit message has a trailer"; exit 1
+          fi
