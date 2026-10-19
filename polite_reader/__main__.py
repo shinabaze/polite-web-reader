@@ -30,7 +30,7 @@ def main(argv=None) -> int:
         if a.json:
             print(json.dumps(page.to_dict(), ensure_ascii=False))
             continue
-        head = f"{page.status or '-'} {page.source:<11} {page.final_url}"
+        head = f"{page.status or '-'} {page.source or '-':<11} {page.final_url}"
         if not page.ok:
             print(f"{head}\n  {page.error}\n")
         elif a.links:

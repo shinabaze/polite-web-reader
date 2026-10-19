@@ -1,0 +1,4 @@
+# A made-up shop's robots.txt for the demo.
+User-agent: *
+Disallow: /private/
+Crawl-delay: 1

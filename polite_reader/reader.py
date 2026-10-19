@@ -30,7 +30,7 @@ class Page:
     ok: bool = False
     status: int = 0
     final_url: str = ""
-    source: str = "network"  # network, cache, or revalidated (the server said "not modified")
+    source: str = ""  # network, cache, or revalidated (the server said "not modified"); empty if nothing was read
     content_type: str = ""
     title: str = ""
     text: str = ""
